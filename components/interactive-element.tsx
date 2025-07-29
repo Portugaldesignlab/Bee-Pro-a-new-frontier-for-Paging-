@@ -212,6 +212,20 @@ export function InteractiveElement({
               newX = dragState.initialElementX + (dragState.startWidth - newWidth)
               newY = dragState.initialElementY + (dragState.startHeight - newHeight)
               break
+            case "n":
+              newHeight = Math.max(minSize, dragState.startHeight - deltaY)
+              newY = dragState.initialElementY + (dragState.startHeight - newHeight)
+              break
+            case "s":
+              newHeight = Math.max(minSize, dragState.startHeight + deltaY)
+              break
+            case "w":
+              newWidth = Math.max(minSize, dragState.startWidth - deltaX)
+              newX = dragState.initialElementX + (dragState.startWidth - newWidth)
+              break
+            case "e":
+              newWidth = Math.max(minSize, dragState.startWidth + deltaX)
+              break
           }
 
           setLocalPosition({ x: newX, y: newY })
@@ -496,6 +510,48 @@ export function InteractiveElement({
               right: -handleSize / 2,
             }}
             onMouseDown={(e) => handleMouseDown(e, "resize", "se")}
+          />
+
+          {/* Middle Resize Handles */}
+          {/* Top middle */}
+          <div
+            className="absolute w-2 h-2 bg-blue-500 border border-white cursor-n-resize hover:bg-blue-600 transition-colors"
+            style={{
+              top: -handleSize / 2,
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+            onMouseDown={(e) => handleMouseDown(e, "resize", "n")}
+          />
+          {/* Bottom middle */}
+          <div
+            className="absolute w-2 h-2 bg-blue-500 border border-white cursor-s-resize hover:bg-blue-600 transition-colors"
+            style={{
+              bottom: -handleSize / 2,
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+            onMouseDown={(e) => handleMouseDown(e, "resize", "s")}
+          />
+          {/* Left middle */}
+          <div
+            className="absolute w-2 h-2 bg-blue-500 border border-white cursor-w-resize hover:bg-blue-600 transition-colors"
+            style={{
+              top: "50%",
+              left: -handleSize / 2,
+              transform: "translateY(-50%)",
+            }}
+            onMouseDown={(e) => handleMouseDown(e, "resize", "w")}
+          />
+          {/* Right middle */}
+          <div
+            className="absolute w-2 h-2 bg-blue-500 border border-white cursor-e-resize hover:bg-blue-600 transition-colors"
+            style={{
+              top: "50%",
+              right: -handleSize / 2,
+              transform: "translateY(-50%)",
+            }}
+            onMouseDown={(e) => handleMouseDown(e, "resize", "e")}
           />
 
           {/* Rotation Handle */}

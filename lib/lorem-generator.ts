@@ -1,5 +1,86 @@
 export class LoremGenerator {
-  private static readonly LOREM_WORDS = [
+  private static headlines = [
+    "Revolutionary Design Principles",
+    "The Future of Digital Innovation",
+    "Sustainable Architecture Today",
+    "Modern Typography Excellence",
+    "Creative Solutions Unveiled",
+    "Breaking Design Boundaries",
+    "Innovative User Experience",
+    "Contemporary Visual Language",
+    "Strategic Brand Development",
+    "Digital Transformation Era",
+    "Minimalist Design Philosophy",
+    "Advanced Layout Systems",
+    "Professional Design Standards",
+    "Creative Industry Insights",
+    "Modern Design Methodology",
+    "Visual Communication Excellence",
+    "Design Thinking Process",
+    "Contemporary Art Direction",
+    "Brand Identity Evolution",
+    "Digital Design Mastery",
+  ]
+
+  private static subheadings = [
+    "Exploring new possibilities in design",
+    "A comprehensive approach to creativity",
+    "Understanding modern design principles",
+    "The intersection of form and function",
+    "Building better user experiences",
+    "Innovative solutions for complex problems",
+    "The evolution of visual communication",
+    "Strategic thinking in design process",
+    "Contemporary approaches to branding",
+    "Digital innovation in creative industries",
+    "Sustainable design for the future",
+    "Professional standards and best practices",
+    "Creative problem-solving methodologies",
+    "The art and science of design",
+    "Modern typography and layout systems",
+  ]
+
+  private static captions = [
+    "Figure 1: Contemporary design showcase",
+    "Image courtesy of Design Studio",
+    "Professional photography by John Smith",
+    "Architectural detail from recent project",
+    "Brand identity elements and applications",
+    "User interface design exploration",
+    "Typography specimen and variations",
+    "Color palette and visual hierarchy",
+    "Layout grid system demonstration",
+    "Creative process documentation",
+    "Design iteration and refinement",
+    "Final presentation materials",
+    "Client collaboration workspace",
+    "Design system components",
+    "Visual identity guidelines",
+  ]
+
+  private static bodyParagraphs = [
+    "In the rapidly evolving landscape of contemporary design, professionals must navigate an increasingly complex array of tools, methodologies, and client expectations. The integration of digital technologies with traditional design principles has created unprecedented opportunities for creative expression while simultaneously demanding higher levels of technical proficiency and strategic thinking.",
+
+    "Modern design practice requires a deep understanding of user psychology, cultural context, and technological constraints. Successful designers must balance aesthetic considerations with functional requirements, ensuring that their work not only looks compelling but also serves its intended purpose effectively. This holistic approach to design thinking has become essential in today's competitive marketplace.",
+
+    "The democratization of design tools has fundamentally altered the creative landscape, enabling more people to participate in the design process while raising questions about professional standards and quality control. As artificial intelligence and machine learning technologies continue to advance, designers must adapt their skills and redefine their value proposition in an increasingly automated world.",
+
+    "Sustainability has emerged as a critical consideration in all aspects of design practice, from material selection and production methods to the long-term environmental impact of creative decisions. Designers today must consider the full lifecycle of their work, seeking solutions that minimize waste and maximize positive social and environmental outcomes.",
+
+    "The globalization of design culture has created both opportunities and challenges for creative professionals. While digital platforms enable unprecedented collaboration and knowledge sharing across geographical boundaries, they also intensify competition and require designers to develop cultural sensitivity and adaptability in their approach to different markets and audiences.",
+
+    "Typography continues to play a fundamental role in visual communication, with new technologies enabling more sophisticated and expressive typographic treatments. The careful selection and application of typefaces can significantly impact the effectiveness of design solutions, making typographic literacy an essential skill for contemporary designers.",
+
+    "Color theory and application remain central to effective design practice, with advances in display technology and printing methods expanding the possibilities for color expression. Understanding the psychological and cultural associations of color choices is crucial for creating designs that resonate with intended audiences and achieve desired emotional responses.",
+
+    "The rise of user experience design has shifted focus from purely aesthetic considerations to comprehensive understanding of user behavior, needs, and motivations. This human-centered approach to design requires extensive research, testing, and iteration to create solutions that truly serve user needs while achieving business objectives.",
+
+    "Brand identity design has evolved beyond simple logo creation to encompass comprehensive systems that guide all aspects of organizational communication. Modern brand designers must understand business strategy, market positioning, and stakeholder relationships to create identities that effectively represent and differentiate their clients in competitive markets.",
+
+    "Digital design tools continue to evolve at a rapid pace, offering new capabilities while requiring continuous learning and adaptation from design professionals. The most successful designers maintain a balance between leveraging new technologies and maintaining focus on fundamental design principles that transcend specific tools or platforms.",
+  ]
+
+  private static loremWords = [
     "lorem",
     "ipsum",
     "dolor",
@@ -116,232 +197,154 @@ export class LoremGenerator {
     "incidunt",
     "magnam",
     "quaerat",
-    "voluptatem",
   ]
 
-  private static readonly HEADLINES = [
-    "The Future of Design Excellence",
-    "Innovation in Modern Publishing",
-    "Breaking New Creative Ground",
-    "Revolutionary Design Approaches",
-    "Creative Solutions for Tomorrow",
-    "Transforming Visual Communication",
-    "Next Generation Design Thinking",
-    "Pioneering Excellence in Layout",
-    "Visionary Leadership in Design",
-    "Sustainable Design Progress",
-    "Mastering Visual Hierarchy",
-    "The Art of Professional Layout",
-    "Design Systems That Work",
-    "Creating Impactful Experiences",
-    "Modern Typography Principles",
-    "Crafting Digital Experiences",
-    "The Science of Visual Design",
-    "Building Better User Interfaces",
-    "Design Thinking Methodologies",
-    "Creative Problem Solving",
-  ]
+  static generateHeadline(): string {
+    return this.headlines[Math.floor(Math.random() * this.headlines.length)]
+  }
 
-  private static readonly CAPTIONS = [
-    "Figure 1: Detailed analysis of current design trends and their impact on user experience across multiple platforms.",
-    "Photo courtesy of the design studio showcasing innovative layout techniques used in modern publication design.",
-    "Illustration demonstrates key concepts in modern visual communication design and information architecture.",
-    "Data visualization from recent study on effective layout principles and their application in digital media.",
-    "Example of innovative approach to grid-based design systems and their implementation in responsive layouts.",
-    "Case study results overview showing improved readability metrics and user engagement across different formats.",
-    "Technical specifications included for professional implementation of scalable design system architecture.",
-    "Performance metrics displayed across different device formats showing optimization results and improvements.",
-    "Research findings support the effectiveness of this design approach in various publication contexts.",
-    "Implementation guide for scalable design system architecture with detailed specifications and guidelines.",
-  ]
+  static generateSubheading(): string {
+    return this.subheadings[Math.floor(Math.random() * this.subheadings.length)]
+  }
 
-  static generateWords(count: number): string[] {
-    const words: string[] = []
-    for (let i = 0; i < count; i++) {
-      words.push(this.LOREM_WORDS[Math.floor(Math.random() * this.LOREM_WORDS.length)])
+  static generateCaption(): string {
+    return this.captions[Math.floor(Math.random() * this.captions.length)]
+  }
+
+  static generateProfessionalText(targetWords: number, charactersPerLine: number, linesAvailable: number): string {
+    // Select appropriate paragraphs based on target length
+    const selectedParagraphs: string[] = []
+    let currentWordCount = 0
+    const targetWordCount = Math.max(50, targetWords)
+
+    // Shuffle paragraphs for variety
+    const shuffledParagraphs = [...this.bodyParagraphs].sort(() => Math.random() - 0.5)
+
+    for (const paragraph of shuffledParagraphs) {
+      if (currentWordCount >= targetWordCount) break
+
+      selectedParagraphs.push(paragraph)
+      currentWordCount += paragraph.split(" ").length
     }
-    return words
+
+    let text = selectedParagraphs.join("\n\n")
+
+    // Trim to approximate target length if too long
+    if (currentWordCount > targetWordCount * 1.2) {
+      const words = text.split(" ")
+      text = words.slice(0, targetWordCount).join(" ")
+
+      // Ensure we end with a complete sentence
+      const lastPeriod = text.lastIndexOf(".")
+      if (lastPeriod > text.length * 0.8) {
+        text = text.substring(0, lastPeriod + 1)
+      }
+    }
+
+    // Add professional formatting for justified text
+    return this.formatForJustification(text, charactersPerLine, linesAvailable)
   }
 
-  static generateSentence(minWords = 8, maxWords = 15): string {
+  private static formatForJustification(text: string, charactersPerLine: number, linesAvailable: number): string {
+    // Split into paragraphs
+    const paragraphs = text.split("\n\n")
+    const formattedParagraphs: string[] = []
+
+    for (const paragraph of paragraphs) {
+      // Break paragraph into lines that fit the character limit
+      const words = paragraph.split(" ")
+      const lines: string[] = []
+      let currentLine = ""
+
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word
+
+        if (testLine.length <= charactersPerLine) {
+          currentLine = testLine
+        } else {
+          if (currentLine) {
+            lines.push(currentLine)
+            currentLine = word
+          } else {
+            // Word is longer than line, break it
+            lines.push(word.substring(0, charactersPerLine))
+            currentLine = word.substring(charactersPerLine)
+          }
+        }
+      }
+
+      if (currentLine) {
+        lines.push(currentLine)
+      }
+
+      // Limit to available lines
+      const paragraphLines = lines.slice(0, Math.max(1, Math.floor(linesAvailable / paragraphs.length)))
+      formattedParagraphs.push(paragraphLines.join("\n"))
+    }
+
+    return formattedParagraphs.join("\n\n")
+  }
+
+  static generateSentence(minWords = 8, maxWords = 20): string {
+    const words = [
+      "design",
+      "creative",
+      "innovative",
+      "professional",
+      "modern",
+      "contemporary",
+      "strategic",
+      "effective",
+      "comprehensive",
+      "sophisticated",
+      "elegant",
+      "functional",
+      "aesthetic",
+      "visual",
+      "digital",
+      "sustainable",
+      "dynamic",
+      "solution",
+      "approach",
+      "methodology",
+      "principle",
+      "concept",
+      "framework",
+      "system",
+      "process",
+      "technique",
+      "standard",
+      "practice",
+      "application",
+      "development",
+      "implementation",
+      "optimization",
+      "enhancement",
+      "integration",
+      "collaboration",
+      "communication",
+      "presentation",
+      "documentation",
+      "analysis",
+    ]
+
     const wordCount = Math.floor(Math.random() * (maxWords - minWords + 1)) + minWords
-    const words = this.generateWords(wordCount)
-    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
-    return words.join(" ") + "."
+    const selectedWords: string[] = []
+
+    for (let i = 0; i < wordCount; i++) {
+      selectedWords.push(words[Math.floor(Math.random() * words.length)])
+    }
+
+    // Capitalize first word and add period
+    selectedWords[0] = selectedWords[0].charAt(0).toUpperCase() + selectedWords[0].slice(1)
+    return selectedWords.join(" ") + "."
   }
 
-  static generateParagraph(minSentences = 3, maxSentences = 6): string {
-    const sentenceCount = Math.floor(Math.random() * (maxSentences - minSentences + 1)) + minSentences
+  static generateParagraph(sentenceCount = 4): string {
     const sentences: string[] = []
     for (let i = 0; i < sentenceCount; i++) {
       sentences.push(this.generateSentence())
     }
     return sentences.join(" ")
   }
-
-  static generateText(wordCount: number): string {
-    if (wordCount <= 0) return ""
-
-    const words = this.generateWords(wordCount)
-    let text = ""
-    let currentSentenceLength = 0
-    const avgSentenceLength = 12
-
-    for (let i = 0; i < words.length; i++) {
-      if (i === 0 || currentSentenceLength === 0) {
-        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1)
-      }
-
-      text += words[i]
-      currentSentenceLength++
-
-      if (i < words.length - 1) {
-        if (currentSentenceLength >= avgSentenceLength && Math.random() > 0.3) {
-          text += ". "
-          currentSentenceLength = 0
-        } else {
-          text += " "
-        }
-      } else {
-        text += "."
-      }
-    }
-
-    return text
-  }
-
-  static generateFormattedText(wordCount: number, charactersPerLine: number, maxLines: number): string {
-    if (wordCount <= 0 || maxLines <= 0) return ""
-
-    // Generate text with proper paragraph structure
-    const paragraphs: string[] = []
-    let remainingWords = wordCount
-    let remainingLines = maxLines
-
-    while (remainingWords > 0 && remainingLines > 2) {
-      // Calculate words per paragraph based on available space
-      const linesForParagraph = Math.min(4, remainingLines - 1)
-      const wordsForParagraph = Math.min(remainingWords, Math.floor((charactersPerLine * linesForParagraph) / 6))
-
-      if (wordsForParagraph > 0) {
-        const paragraph = this.generateText(wordsForParagraph)
-
-        // Apply hyphenation for better text flow
-        const hyphenatedParagraph = this.applyHyphenation(paragraph)
-        paragraphs.push(hyphenatedParagraph)
-
-        remainingWords -= wordsForParagraph
-        remainingLines -= Math.ceil(hyphenatedParagraph.length / charactersPerLine) + 1
-      } else {
-        break
-      }
-    }
-
-    let result = paragraphs.join("\n\n")
-
-    // Ensure text fits within character limits
-    const maxCharacters = charactersPerLine * maxLines
-    if (result.length > maxCharacters) {
-      result = result.substring(0, maxCharacters - 3) + "..."
-    }
-
-    return result
-  }
-
-  static generateHeadline(): string {
-    return this.HEADLINES[Math.floor(Math.random() * this.HEADLINES.length)]
-  }
-
-  static generateCaption(): string {
-    return this.CAPTIONS[Math.floor(Math.random() * this.CAPTIONS.length)]
-  }
-
-  static generateSubheading(): string {
-    const words = Math.floor(Math.random() * 4) + 4
-    return this.generateSentence(words, words).replace(".", "")
-  }
-
-  // Apply proper hyphenation for professional text layout
-  private static applyHyphenation(text: string): string {
-    const hyphenationRules = {
-      consectetur: "con-sec-te-tur",
-      exercitation: "ex-er-ci-ta-tion",
-      reprehenderit: "rep-re-hen-de-rit",
-      incididunt: "in-ci-di-dunt",
-      cupidatat: "cu-pi-da-tat",
-      proident: "pro-i-dent",
-      deserunt: "de-se-runt",
-      laborum: "la-bo-rum",
-      voluptate: "vo-lup-ta-te",
-      excepteur: "ex-cep-teur",
-      accusamus: "ac-cu-sa-mus",
-      accusantium: "ac-cu-san-ti-um",
-      doloremque: "do-lo-rem-que",
-      laudantium: "lau-dan-ti-um",
-      architecto: "ar-chi-tec-to",
-      inventore: "in-ven-to-re",
-      veritatis: "ve-ri-ta-tis",
-      explicabo: "ex-pli-ca-bo",
-      consequuntur: "con-se-quen-tur",
-      aspernatur: "as-per-na-tur",
-      quisquam: "quis-quam",
-      voluptatem: "vo-lup-ta-tem",
-      communication: "com-mu-ni-ca-tion",
-      implementation: "im-ple-men-ta-tion",
-      architecture: "ar-chi-tec-ture",
-      specification: "spec-i-fi-ca-tion",
-      optimization: "op-ti-mi-za-tion",
-    }
-
-    let hyphenatedText = text
-    Object.entries(hyphenationRules).forEach(([word, hyphenated]) => {
-      const regex = new RegExp(`\\b${word}\\b`, "gi")
-      hyphenatedText = hyphenatedText.replace(regex, hyphenated)
-    })
-
-    return hyphenatedText
-  }
-
-  // Generate justified text with proper word spacing
-  static generateJustifiedText(wordCount: number, charactersPerLine: number, maxLines: number): string {
-    const text = this.generateFormattedText(wordCount, charactersPerLine, maxLines)
-    return this.applyJustification(text, charactersPerLine)
-  }
-
-  private static applyJustification(text: string, charactersPerLine: number): string {
-    const lines = text.split("\n")
-    const justifiedLines = lines.map((line) => {
-      if (line.trim().length === 0) return line
-
-      const words = line.trim().split(" ")
-      if (words.length === 1) return line
-
-      const totalChars = words.join("").length
-      const spacesNeeded = charactersPerLine - totalChars
-      const gaps = words.length - 1
-
-      if (gaps > 0 && spacesNeeded > gaps) {
-        const baseSpaces = Math.floor(spacesNeeded / gaps)
-        const extraSpaces = spacesNeeded % gaps
-
-        let justifiedLine = ""
-        for (let i = 0; i < words.length; i++) {
-          justifiedLine += words[i]
-          if (i < words.length - 1) {
-            justifiedLine += " ".repeat(baseSpaces + (i < extraSpaces ? 1 : 0))
-          }
-        }
-        return justifiedLine
-      }
-
-      return line
-    })
-
-    return justifiedLines.join("\n")
-  }
-}
-
-// Export default function for backward compatibility
-export function generateLoremText(wordCount: number): string {
-  return LoremGenerator.generateText(wordCount)
 }
