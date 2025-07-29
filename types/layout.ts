@@ -4,11 +4,11 @@ export interface LayoutConfig {
   customWidth: number
   customHeight: number
   pageCount: number
-  orientation: "portrait" | "landscape"
+  orientation?: "portrait" | "landscape"
 
   // Paper settings
-  paperType: string
-  paperBrand: string
+  paperType?: string
+  paperBrand?: string
   gsm: number
 
   // Margins
@@ -24,9 +24,9 @@ export interface LayoutConfig {
   rows: number
   gridSpacingX: number
   gridSpacingY: number
-  gridSizeMode: "count" | "size"
-  gridCellWidth: number
-  gridCellHeight: number
+  gridSizeMode?: "count" | "size"
+  gridCellWidth?: number
+  gridCellHeight?: number
   gutterX: number
   gutterY: number
 
@@ -34,25 +34,25 @@ export interface LayoutConfig {
   showGridLines: boolean
   gridLineColor: string
   gridLineOpacity: number
-  showRuleOfThirds: boolean
-  showGoldenRatio: boolean
+  showRuleOfThirds?: boolean
+  showGoldenRatio?: boolean
   snapToGrid: boolean
 
   // Typography
   primaryFont: string
-  secondaryFont: string
+  secondaryFont?: string
   baseFontSize: number
   baseLeading: number
-  textColor: string
-  paragraphSpacing: number
+  textColor?: string
+  paragraphSpacing?: number
   enableHyphenation: boolean
   enableJustification: boolean
   enableOrphanControl: boolean
   wordSpacing: number
   letterSpacing: number
   glyphScaling: number
-  hyphenationZone: number
-  maxConsecutiveHyphens: number
+  hyphenationZone?: number
+  maxConsecutiveHyphens?: number
 
   // Content
   imageCount: number
@@ -65,19 +65,19 @@ export interface LayoutConfig {
 
   // Spread settings
   spreadView: boolean
-  bindingGutter: number
-  allowSpreadElements: boolean
+  bindingGutter?: number
+  allowSpreadElements?: boolean
 
   // Binding and printing
   bindingType: string
   bleed: number
-  coverBleed: number
+  coverBleed?: number
 
   // Cover margins (if different from inner pages)
-  coverMarginTop: number
-  coverMarginBottom: number
-  coverMarginInner: number
-  coverMarginOuter: number
+  coverMarginTop?: number
+  coverMarginBottom?: number
+  coverMarginInner?: number
+  coverMarginOuter?: number
 }
 
 export interface LayoutElement {
