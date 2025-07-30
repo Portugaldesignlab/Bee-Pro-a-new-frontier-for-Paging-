@@ -1,30 +1,28 @@
-# Grid layout generator
+Project Goal
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+To build a smart, generative paging system that creates a complete, multi-page layout ready for content insertion—text and images—without requiring manual setup on each page.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/emanuel-maias-projects/v0-grid-layout-generator)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/0W5UWP1jEbl)
+🔧 Core Objectives
+🧠 One-Click Layout Generation: Enable users to generate an entire document's layout structure with a single action—automatically applying a clean, organized design across all pages.
 
-## Overview
+📄 Placeholder Structure: Each page is automatically populated with editable layout zones—titles, subheaders, body text blocks, image frames, and captions—all proportionally aligned to grid and margin systems.
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+🎨 Design System Integration: Ensure visual consistency using pre-defined typography scales, spacing rules, and layout grids based on modern design principles.
 
-## Deployment
+🔄 Dynamic Layout Logic: Vary layouts page by page to maintain visual interest, but keep consistency through smart propagation of rules.
 
-Your project is live at:
+✍️ Content-Ready: Once generated, the layout acts as a framework—users only need to insert text and images in the placeholders. No additional layout editing needed.
 
-**[https://vercel.com/emanuel-maias-projects/v0-grid-layout-generator](https://vercel.com/emanuel-maias-projects/v0-grid-layout-generator)**
+📤 Export-Ready: Layouts should be ready for PDF export, web publication, or DTP tools like InDesign or Figma.
+Example User Flow
 
-## Build your app
+✅ User clicks “Generate Layout” in the app
 
-Continue building your app on:
+🔄 App automatically generates unique but cohesive layouts for all pages (based on grid, content zones, margins)
 
-**[https://v0.dev/chat/projects/0W5UWP1jEbl](https://v0.dev/chat/projects/0W5UWP1jEbl)**
+🖼️ Each page displays image and text placeholders clearly
 
-## How It Works
+✍️ User only needs to insert the content—no manual formatting or layout adjustments
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+📤 Final result can be exported or previewed immediately
+
