@@ -1,5 +1,5 @@
 import type { LayoutConfig, LayoutElement, GeneratedLayout } from "@/types/layout"
-import { WordDocumentParser, type ExtractedContent } from "./word-parser"
+import { LoremGenerator } from "./lorem-generator"
 
 export interface GridPosition {
   gridX: number
@@ -193,27 +193,6 @@ interface ElementPlan {
   priority: number
   spreadPosition?: "left" | "right" | "center" | "span"
   page: number
-}
-
-// Global content store for uploaded content
-let globalExtractedContent: ExtractedContent | null = null
-let globalContentSegments: ReturnType<typeof WordDocumentParser.segmentContentForLayout> | null = null
-let globalContentIndex = {
-  titles: 0,
-  subtitles: 0,
-  bodies: 0,
-  captions: 0,
-}
-
-export function setGlobalContent(content: ExtractedContent | null) {
-  globalExtractedContent = content
-  if (content) {
-    globalContentSegments = WordDocumentParser.segmentContentForLayout(content, 20)
-    globalContentIndex = { titles: 0, subtitles: 0, bodies: 0, captions: 0 }
-  } else {
-    globalContentSegments = null
-    globalContentIndex = { titles: 0, subtitles: 0, bodies: 0, captions: 0 }
-  }
 }
 
 // Grid occupancy tracker with spread support
@@ -529,67 +508,6 @@ function calculateTextMetrics(width: number, height: number, fontSize: number, l
   }
 }
 
-// Get content from uploaded document or fallback to Lorem Ipsum
-function getContentForElement(
-  textType: "title" | "subtitle" | "body" | "caption",
-  width: number,
-  height: number,
-  fontSize: number,
-  leading: number,
-): string {
-  // Use uploaded content if available
-  if (globalContentSegments) {
-    switch (textType) {
-      case "title":
-        if (globalContentIndex.titles < globalContentSegments.titles.length) {
-          return globalContentSegments.titles[globalContentIndex.titles++]
-        }
-        break
-      case "subtitle":
-        if (globalContentIndex.subtitles < globalContentSegments.subtitles.length) {
-          return globalContentSegments.subtitles[globalContentIndex.subtitles++]
-        }
-        break
-      case "body":
-        if (globalContentIndex.bodies < globalContentSegments.bodies.length) {
-          return globalContentSegments.bodies[globalContentIndex.bodies++]
-        }
-        break
-      case "caption":
-        if (globalContentIndex.captions < globalContentSegments.captions.length) {
-          return globalContentSegments.captions[globalContentIndex.captions++]
-        }
-        break
-    }
-  }
-
-  // Fallback to Lorem Ipsum
-  return generateLoremContent(textType, width, height, fontSize, leading)
-}
-
-// Generate Lorem Ipsum content (fallback)
-function generateLoremContent(
-  textType: "title" | "subtitle" | "body" | "caption",
-  width: number,
-  height: number,
-  fontSize: number,
-  leading: number,
-): string {
-  switch (textType) {
-    case "title":
-      return generateHeadline()
-    case "subtitle":
-      return generateSubheading()
-    case "body":
-      const metrics = calculateTextMetrics(width, height, fontSize, leading)
-      return generateProfessionalText(metrics.wordsApprox, metrics.charactersPerLine, metrics.linesAvailable)
-    case "caption":
-      return generateCaption()
-    default:
-      return "Sample text content"
-  }
-}
-
 // Create text element with proper grid positioning and spread support
 export function createTextElement(
   config: LayoutConfig,
@@ -634,33 +552,40 @@ export function createTextElement(
   // Set typography based on text type
   let fontSize = config.baseFontSize || 12
   let leading = config.baseLeading || 1.4
+  let content = ""
   let textAlign: "left" | "center" | "right" | "justify" = "left"
 
   switch (textType) {
     case "title":
       fontSize = (config.baseFontSize || 12) * 2.5
       leading = 1.1
+      content = LoremGenerator.generateHeadline()
       textAlign = "left"
       break
     case "subtitle":
       fontSize = (config.baseFontSize || 12) * 1.5
       leading = 1.2
+      content = LoremGenerator.generateSubheading()
       textAlign = "left"
       break
     case "body":
       fontSize = config.baseFontSize || 12
       leading = config.baseLeading || 1.4
+      const metrics = calculateTextMetrics(width, height, fontSize, leading)
+      content = LoremGenerator.generateProfessionalText(
+        metrics.wordsApprox,
+        metrics.charactersPerLine,
+        metrics.linesAvailable,
+      )
       textAlign = "justify"
       break
     case "caption":
       fontSize = (config.baseFontSize || 12) * 0.85
       leading = 1.3
+      content = LoremGenerator.generateCaption()
       textAlign = "left"
       break
   }
-
-  // Get content (from uploaded document or Lorem Ipsum)
-  const content = getContentForElement(textType, width, height, fontSize, leading)
 
   return {
     id,
@@ -782,139 +707,8 @@ export function findNextAvailablePosition(
   return position || { gridX: 0, gridY: 0 }
 }
 
-// Professional content generation functions (Lorem Ipsum fallbacks)
-function generateHeadline(): string {
-  const headlines = [
-    "Design Systems at Scale",
-    "The Future of Digital Interfaces",
-    "Sustainable Design Practices",
-    "User-Centered Innovation",
-    "Creative Technology Solutions",
-    "Minimalist Design Philosophy",
-    "Interactive Experience Design",
-    "Brand Identity Evolution",
-    "Digital Transformation Strategy",
-    "Accessible Design Standards",
-    "Visual Communication Theory",
-    "Design Thinking Methodology",
-    "Collaborative Design Process",
-    "Emerging Design Trends",
-    "Human-Computer Interaction",
-    "Responsive Design Principles",
-    "Typography in Digital Media",
-    "Color Theory Applications",
-    "Information Architecture",
-    "Design Research Methods",
-  ]
-  return headlines[Math.floor(Math.random() * headlines.length)]
-}
-
-function generateSubheading(): string {
-  const subheadings = [
-    "Exploring modern approaches to creative problem-solving",
-    "Building bridges between technology and human experience",
-    "Crafting meaningful digital interactions for tomorrow",
-    "Innovative strategies for contemporary design challenges",
-    "Balancing aesthetics with functional requirements",
-    "Creating inclusive experiences for diverse audiences",
-    "Leveraging data-driven insights for better design",
-    "Sustainable practices in digital product development",
-    "Cross-platform consistency in modern applications",
-    "The intersection of art and technology",
-    "User research methodologies for design validation",
-    "Prototyping techniques for rapid iteration",
-    "Design system documentation and maintenance",
-    "Accessibility considerations in interface design",
-    "Performance optimization through thoughtful design",
-    "Cultural sensitivity in global design projects",
-    "Emerging technologies and design opportunities",
-    "Collaborative workflows in distributed teams",
-    "Design ethics and social responsibility",
-    "Future-proofing design decisions",
-  ]
-  return subheadings[Math.floor(Math.random() * subheadings.length)]
-}
-
-function generateCaption(): string {
-  const captions = [
-    "Modern interface design showcasing clean typography and balanced composition",
-    "User experience research session revealing key insights about interaction patterns",
-    "Collaborative design workshop exploring innovative solutions to complex problems",
-    "Digital prototype demonstrating responsive behavior across multiple devices",
-    "Brand identity system featuring consistent visual language and messaging",
-    "Accessibility testing session ensuring inclusive design for all users",
-    "Design system components organized for scalability and maintainability",
-    "User journey mapping exercise identifying pain points and opportunities",
-    "Creative brainstorming session generating diverse concepts and approaches",
-    "Usability testing revealing user preferences and behavioral patterns",
-    "Design critique session fostering constructive feedback and iteration",
-    "Information architecture diagram showing content organization and flow",
-    "Color palette exploration balancing brand requirements with accessibility",
-    "Typography study examining readability and visual hierarchy",
-    "Wireframe iterations exploring different layout and interaction possibilities",
-    "Design handoff documentation ensuring accurate implementation",
-    "User persona development based on comprehensive research findings",
-    "Competitive analysis highlighting market trends and opportunities",
-    "Design sprint results showcasing rapid prototyping and validation",
-    "Cross-functional team collaboration driving innovative design solutions",
-  ]
-  return captions[Math.floor(Math.random() * captions.length)]
-}
-
-function generateProfessionalText(targetWords: number, charactersPerLine: number, linesAvailable: number): string {
-  const paragraphs = [
-    "Design thinking represents a human-centered approach to innovation that integrates the needs of people, the possibilities of technology, and requirements for business success. This methodology encourages organizations to focus on the people they're creating for, which leads to better products, services, and internal processes.",
-
-    "User experience design encompasses all aspects of the end-user's interaction with the company, its services, and its products. The goal is to create easy, efficient, relevant, and all-around pleasant experiences for the user. This holistic approach considers every touchpoint and interaction.",
-
-    "Sustainable design practices are becoming increasingly important in our digital world. By considering the environmental impact of our design decisions, we can create more responsible solutions that minimize resource consumption while maximizing user value and satisfaction.",
-
-    "Accessibility in design ensures that products and services are usable by people with disabilities. This includes considerations for visual, auditory, motor, and cognitive impairments. Universal design principles benefit all users, not just those with specific needs.",
-
-    "Design systems provide a collection of reusable components, guided by clear standards, that can be assembled together to build any number of applications. They enable teams to build cohesive user experiences at scale while maintaining consistency across products.",
-
-    "Collaborative design processes bring together diverse perspectives and expertise to solve complex problems. Cross-functional teams that include designers, developers, product managers, and stakeholders can create more innovative and effective solutions.",
-
-    "Visual hierarchy guides users through content by establishing a clear order of importance. Through the strategic use of typography, color, spacing, and layout, designers can direct attention and improve comprehension of information.",
-
-    "Responsive design ensures that digital experiences work seamlessly across all devices and screen sizes. This approach prioritizes flexibility and adaptability, creating layouts that respond intelligently to different viewing contexts and user needs.",
-
-    "User research provides the foundation for informed design decisions. Through methods like interviews, surveys, usability testing, and analytics, designers can understand user behaviors, needs, and pain points to create more effective solutions.",
-
-    "Information architecture involves organizing and structuring content in a way that helps users find information and complete tasks efficiently. Good information architecture is invisible to users but essential for creating intuitive navigation and content discovery.",
-  ]
-
-  let result = ""
-  let wordCount = 0
-
-  // Add paragraphs until we reach the target word count
-  while (wordCount < targetWords && result.length < charactersPerLine * linesAvailable * 0.8) {
-    const paragraph = paragraphs[Math.floor(Math.random() * paragraphs.length)]
-    const paragraphWords = paragraph.split(" ").length
-
-    if (wordCount + paragraphWords <= targetWords * 1.2) {
-      result += (result ? " " : "") + paragraph
-      wordCount += paragraphWords
-    } else {
-      // Add partial paragraph if needed
-      const wordsNeeded = targetWords - wordCount
-      const words = paragraph.split(" ")
-      const partialParagraph = words.slice(0, wordsNeeded).join(" ")
-      result += (result ? " " : "") + partialParagraph
-      break
-    }
-  }
-
-  return result || paragraphs[0]
-}
-
 // Main layout generation function with proper page and spread handling
-export function generateLayout(config: LayoutConfig, extractedContent?: ExtractedContent | null): GeneratedLayout {
-  // Set global content if provided
-  if (extractedContent !== undefined) {
-    setGlobalContent(extractedContent)
-  }
-
+export function generateLayout(config: LayoutConfig): GeneratedLayout {
   const elements: LayoutElement[] = []
   const totalPages = config.pageCount || 6
   const contentArea = calculateContentArea(config)
@@ -922,12 +716,6 @@ export function generateLayout(config: LayoutConfig, extractedContent?: Extracte
 
   console.log(`🎨 Generating ${config.spreadView ? "spread" : "single page"} layouts for ${totalPages} pages`)
   console.log(`📐 Content area: ${contentArea.width?.toFixed(1) || "N/A"}×${contentArea.height.toFixed(1)}mm`)
-
-  if (globalExtractedContent) {
-    console.log(
-      `📄 Using uploaded content: ${globalExtractedContent.metadata.wordCount} words, ${globalExtractedContent.metadata.paragraphCount} paragraphs`,
-    )
-  }
 
   if (config.spreadView) {
     console.log(
@@ -1060,7 +848,7 @@ export function generateLayout(config: LayoutConfig, extractedContent?: Extracte
       generatedAt: new Date(),
       elementCount: elements.length,
       isSpread: config.spreadView,
-      contentType: globalExtractedContent ? "uploaded-content" : "balanced",
+      contentType: "balanced",
     },
   }
 }

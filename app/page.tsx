@@ -9,10 +9,8 @@ import {
   createTextElement,
   createImageElement,
   findNextAvailablePosition,
-  setGlobalContent,
 } from "@/lib/layout-generator"
 import type { LayoutConfig, GeneratedLayout, LayoutElement } from "@/types/layout"
-import type { ExtractedContent } from "@/lib/word-parser"
 
 const defaultConfig: LayoutConfig = {
   pageSize: "A4",
@@ -75,15 +73,11 @@ export default function GridGenie() {
   const [activePanel, setActivePanel] = useState("setup")
   const [currentPage, setCurrentPage] = useState(1)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [extractedContent, setExtractedContent] = useState<ExtractedContent | null>(null)
-  const [isUsingContent, setIsUsingContent] = useState(false)
 
   const handleGenerate = async () => {
     setIsGenerating(true)
     try {
-      // Pass the extracted content to the layout generator
-      const contentToUse = isUsingContent ? extractedContent : null
-      const layout = await generateLayout(config, contentToUse)
+      const layout = await generateLayout(config)
       setGeneratedLayout(layout)
     } catch (error) {
       console.error("Layout generation failed:", error)
@@ -155,19 +149,6 @@ export default function GridGenie() {
 
   const handleToggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed)
-  }
-
-  const handleContentExtracted = (content: ExtractedContent) => {
-    setExtractedContent(content)
-    setGlobalContent(content)
-    if (content) {
-      setIsUsingContent(true)
-    }
-  }
-
-  const handleUseContent = (useContent: boolean) => {
-    setIsUsingContent(useContent)
-    setGlobalContent(useContent ? extractedContent : null)
   }
 
   const handleAddText = () => {
@@ -296,10 +277,6 @@ export default function GridGenie() {
           onPanelChange={setActivePanel}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={handleToggleSidebar}
-          extractedContent={extractedContent}
-          isUsingContent={isUsingContent}
-          onContentExtracted={handleContentExtracted}
-          onUseContent={handleUseContent}
         />
 
         {/* Constant Rulers Workspace */}
