@@ -93,9 +93,15 @@ export interface LayoutElement {
   // Text-specific properties
   fontSize?: number
   fontFamily?: string
+  fontWeight?: "normal" | "bold" | "500" | "600" | "700"
   color?: string
+  backgroundColor?: string
   textAlign?: "left" | "center" | "right" | "justify"
   leading?: number
+  letterSpacing?: number
+  wordSpacing?: number
+  textTransform?: "none" | "uppercase" | "lowercase" | "capitalize"
+  opacity?: number
 
   // Transform properties
   rotation?: number
