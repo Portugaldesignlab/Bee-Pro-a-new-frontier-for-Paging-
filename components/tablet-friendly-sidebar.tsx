@@ -115,86 +115,109 @@ export function TabletFriendlySidebar({
   }
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-80 bg-white border-r border-gray-200 flex flex-col h-screen overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold">Layout Controls</h2>
-        <Button variant="ghost" size="sm" onClick={onToggleCollapse} className="h-8 w-8 p-0" title="Collapse sidebar">
+      <div className="flex items-center justify-between p-3 border-b border-gray-200 flex-shrink-0">
+        <h2 className="text-sm font-semibold">Layout Controls</h2>
+        <Button variant="ghost" size="sm" onClick={onToggleCollapse} className="h-7 w-7 p-0" title="Collapse sidebar">
           <ChevronLeft className="h-4 w-4" />
         </Button>
       </div>
 
-      {/* Tabs */}
-      <Tabs value={activePanel} onValueChange={onPanelChange} className="flex-1 flex flex-col">
-        <TabsList className="grid grid-cols-6 m-4 mb-0">
-          {tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} className="relative">
-              <tab.icon className="h-4 w-4" />
-              {tab.badge && (
-                <Badge
-                  variant="secondary"
-                  className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs flex items-center justify-center"
-                >
-                  {tab.badge}
-                </Badge>
-              )}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      {/* Tabs - Fixed at top */}
+      <div className="flex-shrink-0 border-b border-gray-200 bg-white">
+        <Tabs value={activePanel} onValueChange={onPanelChange} className="w-full">
+          <TabsList className="grid grid-cols-6 w-full gap-0 bg-transparent">
+            {tabs.map((tab) => (
+              <TabsTrigger
+                key={tab.id}
+                value={tab.id}
+                className="relative rounded-none border-b-2 border-transparent data-[state=active]:border-blue-500 data-[state=active]:bg-blue-50"
+              >
+                <div className="flex flex-col items-center gap-1">
+                  <tab.icon className="h-4 w-4" />
+                  {tab.badge && (
+                    <Badge
+                      variant="secondary"
+                      className="absolute top-0 right-0 h-4 w-4 p-0 text-xs flex items-center justify-center bg-red-500 text-white"
+                    >
+                      {tab.badge}
+                    </Badge>
+                  )}
+                </div>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
 
-        <div className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="p-4">
-              <TabsContent value="setup" className="mt-0">
-                <ControlPanel
-                  config={config}
-                  onChange={onConfigChange}
-                  onGenerate={onGenerate}
-                  isGenerating={isGenerating}
-                />
+      {/* Content Area - Scrollable */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full w-full">
+          <Tabs value={activePanel} onValueChange={onPanelChange} className="w-full">
+            <div className="w-full">
+              <TabsContent value="setup" className="mt-0 px-4 py-3">
+                <div className="space-y-3">
+                  <ControlPanel
+                    config={config}
+                    onChange={onConfigChange}
+                    onGenerate={onGenerate}
+                    isGenerating={isGenerating}
+                  />
+                </div>
               </TabsContent>
 
-              <TabsContent value="content" className="mt-0">
+              <TabsContent value="content" className="mt-0 px-4 py-3">
                 {onContentExtracted && onUseContent && (
-                  <ContentUploadPanel
-                    config={config}
-                    onContentExtracted={onContentExtracted}
-                    onUseContent={onUseContent}
-                    extractedContent={extractedContent || null}
-                    isUsingContent={isUsingContent || false}
-                  />
+                  <div className="space-y-3">
+                    <ContentUploadPanel
+                      config={config}
+                      onContentExtracted={onContentExtracted}
+                      onUseContent={onUseContent}
+                      extractedContent={extractedContent || null}
+                      isUsingContent={isUsingContent || false}
+                    />
+                  </div>
                 )}
               </TabsContent>
 
-              <TabsContent value="elements" className="mt-0">
-                <ElementLayerManager
-                  layout={layout}
-                  onUpdateElement={onUpdateElement}
-                  onDeleteElement={onDeleteElement}
-                  onAddElement={onAddElement}
-                />
+              <TabsContent value="elements" className="mt-0 px-4 py-3">
+                <div className="space-y-3">
+                  <ElementLayerManager
+                    layout={layout}
+                    onUpdateElement={onUpdateElement}
+                    onDeleteElement={onDeleteElement}
+                    onAddElement={onAddElement}
+                  />
+                </div>
               </TabsContent>
 
-              <TabsContent value="grid" className="mt-0">
-                <GridControls config={config} onChange={onConfigChange} />
+              <TabsContent value="grid" className="mt-0 px-4 py-3">
+                <div className="space-y-3">
+                  <GridControls config={config} onChange={onConfigChange} />
+                </div>
               </TabsContent>
 
-              <TabsContent value="style" className="mt-0">
-                <StyleControls
-                  config={config}
-                  layout={layout}
-                  onConfigChange={onConfigChange}
-                  onApplyStyleToAll={handleApplyStyleToAll}
-                />
+              <TabsContent value="style" className="mt-0 px-4 py-3">
+                <div className="space-y-3">
+                  <StyleControls
+                    config={config}
+                    layout={layout}
+                    onConfigChange={onConfigChange}
+                    onApplyStyleToAll={handleApplyStyleToAll}
+                  />
+                </div>
               </TabsContent>
 
-              <TabsContent value="export" className="mt-0">
-                <ExportPanel layout={layout} config={config} />
+              <TabsContent value="export" className="mt-0 px-4 py-3">
+                <div className="space-y-3">
+                  <ExportPanel layout={layout} config={config} />
+                </div>
               </TabsContent>
             </div>
-          </ScrollArea>
-        </div>
-      </Tabs>
+          </Tabs>
+        </ScrollArea>
+      </div>
     </div>
   )
 }
